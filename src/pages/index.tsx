@@ -1,5 +1,6 @@
 import { GetStaticProps } from 'next';
 import Prismic from '@prismicio/client';
+import Link from 'next/link';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -25,9 +26,25 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
-  console.log(postsPagination);
-
-  return <h1>Home</h1>;
+  return (
+    <>
+      <main className={styles.container}>
+        <div className={styles.posts}>
+          {postsPagination.results.map(post => (
+            <Link href={`/post/${post.uid}`} key={post.uid}>
+              <a>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.subtitle}</p>
+                <time>{post.first_publication_date}</time>
+                <span className={styles.postAuthor}>{post.data.author}</span>
+              </a>
+            </Link>
+          ))}
+        </div>
+        <button type="button">Carregar mais posts</button>
+      </main>
+    </>
+  );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -44,7 +61,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const posts = response.results.map(post => {
     return {
-      slug: post.uid,
+      uid: post.uid,
       first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
@@ -56,7 +73,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const postsPagination = {
     next_page: response.next_page,
-    posts,
+    results: posts,
   };
 
   return {
