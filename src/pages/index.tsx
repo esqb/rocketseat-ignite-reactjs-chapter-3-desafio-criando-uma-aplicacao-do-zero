@@ -1,6 +1,11 @@
 import { GetStaticProps } from 'next';
 import Prismic from '@prismicio/client';
 import Link from 'next/link';
+import { IconContext } from 'react-icons';
+import { FiCalendar, FiUser } from 'react-icons/fi';
+
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -26,22 +31,42 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
+  function handleLoadMorePosts(evt: React.MouseEvent<HTMLButtonElement>): void {
+    console.log('Button Clicked');
+  }
+
   return (
     <>
-      <main className={styles.container}>
+      <main className={commonStyles.container}>
         <div className={styles.posts}>
           {postsPagination.results.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
               <a>
                 <strong>{post.data.title}</strong>
                 <p>{post.data.subtitle}</p>
-                <time>{post.first_publication_date}</time>
-                <span className={styles.postAuthor}>{post.data.author}</span>
+                <div className={styles.metaData}>
+                  <IconContext.Provider
+                    value={{ className: 'homeMetaDataIcons' }}
+                  >
+                    <time>
+                      <FiCalendar />
+                      {post.first_publication_date}
+                    </time>
+                    <span className={styles.postAuthor}>
+                      <FiUser />
+                      {post.data.author}
+                    </span>
+                  </IconContext.Provider>
+                </div>
               </a>
             </Link>
           ))}
+          {postsPagination.next_page && (
+            <button type="button" onClick={handleLoadMorePosts}>
+              Carregar mais posts
+            </button>
+          )}
         </div>
-        <button type="button">Carregar mais posts</button>
       </main>
     </>
   );
@@ -60,9 +85,16 @@ export const getStaticProps: GetStaticProps = async () => {
   );
 
   const posts = response.results.map(post => {
+    const formattedDate = format(
+      new Date(post.first_publication_date),
+      'dd MMM yyyy',
+      {
+        locale: ptBR,
+      }
+    );
     return {
       uid: post.uid,
-      first_publication_date: post.first_publication_date,
+      first_publication_date: formattedDate,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,

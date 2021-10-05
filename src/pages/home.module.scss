@@ -1,52 +1,89 @@
-.container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
 .posts {
   max-width: 720px;
-  margin: 5rem auto 0;
+  margin: 3rem auto 0;
 
   a {
     display: block;
 
     & + a {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--gray-700);
+      margin-top: 1rem;
+      padding-top: 1rem;
     }
 
     strong {
+      font-family: Inter, sans-serif;
+      font-style: normal;
       display: block;
-      font-size: 1.5rem;
+      font-weight: bold;
+      font-size: 1.75rem;
+      color: #f8f8f8;
       margin-top: 1rem;
-      line-height: 2rem;
+      line-height: 2.12rem;
+      letter-spacing: -0.031rem;
       transition: color 0.2s;
     }
 
     p {
-      color: var(--gray-300);
-      margin-top: 0.5rem;
-      line-height: 1.625rem;
+      padding-top: 0.4rem;
+      padding-bottom: 1.2rem;
+
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 1rem;
+      color: #d7d7d7;
+      line-height: 1.375rem;
     }
 
     &:hover strong {
-      color: var(--yellow-500);
+      color: #ff57b2;
     }
   }
 
-  time {
-    font-size: 1rem;
+  .metaData {
     display: flex;
-    align-items: center;
-    color: var(--gray-300);
+    flex-wrap: wrap;
   }
 
-  postAuthor {
-    font-size: 1rem;
+  time {
+    padding-right: 2rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    color: #d7d7d7;
+    line-height: 1.06rem;
     display: flex;
     align-items: center;
-    color: var(--gray-300);
+    color: #bbbbbb;
+  }
+
+  .postAuthor {
+    padding-right: 2rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.8rem;
+    color: #d7d7d7;
+    line-height: 1.06rem;
+    display: flex;
+    align-items: center;
+    color: #bbbbbb;
+  }
+
+  button {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+
+    border: none;
+    background: none;
+
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ff57b2;
+    line-height: 1.06rem;
   }
 }
