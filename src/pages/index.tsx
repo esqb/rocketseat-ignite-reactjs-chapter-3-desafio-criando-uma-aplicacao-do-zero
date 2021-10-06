@@ -6,6 +6,7 @@ import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import { useEffect, useState } from 'react';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -31,15 +32,28 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
-  function handleLoadMorePosts(evt: React.MouseEvent<HTMLButtonElement>): void {
-    console.log('Button Clicked');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [nextPage, setNextPage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPosts([...postsPagination.results]);
+    setNextPage(postsPagination.next_page);
+  }, []);
+
+  function handleLoadMorePosts(): void {
+    fetch(nextPage)
+      .then(response => response.json())
+      .then((data: PostPagination) => {
+        setPosts([...posts, ...data.results]);
+        setNextPage(data.next_page);
+      });
   }
 
   return (
     <>
       <main className={commonStyles.container}>
         <div className={styles.posts}>
-          {postsPagination.results.map(post => (
+          {posts.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
               <a>
                 <strong>{post.data.title}</strong>
@@ -86,7 +100,7 @@ export const getStaticProps: GetStaticProps = async () => {
     {
       orderings: '[document.first_publication_date desc]',
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
-      pageSize: 5,
+      pageSize: 1,
     }
   );
 
