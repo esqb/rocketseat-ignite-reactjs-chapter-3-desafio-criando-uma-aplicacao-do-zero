@@ -58,7 +58,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
               <a>
                 <strong>{post.data.title}</strong>
                 <p>{post.data.subtitle}</p>
-                <div className={styles.metaData}>
+                <div className={commonStyles.metaData}>
                   <IconContext.Provider
                     value={{ className: 'homeMetaDataIcons' }}
                   >
@@ -72,7 +72,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
                         }
                       )}
                     </time>
-                    <span className={styles.postAuthor}>
+                    <span className={commonStyles.postAuthor}>
                       <FiUser />
                       {post.data.author}
                     </span>
@@ -96,7 +96,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
   const response = await prismic.query(
-    [Prismic.predicates.at('document.type', 'posts')],
+    [Prismic.predicates.at('document.type', 'posts2')],
     {
       orderings: '[document.first_publication_date desc]',
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
